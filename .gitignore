@@ -1,7 +1,12 @@
-.idea/
-target/
+# Test Apps (Binary files should not be in git)
+src/test/resources/apps/
+
+# Allure Reports and Results
 allure-results/
 allure-report/
+
+# Build and IDE files
+target/
+.idea/
 *.class
-*.log
 .DS_Store

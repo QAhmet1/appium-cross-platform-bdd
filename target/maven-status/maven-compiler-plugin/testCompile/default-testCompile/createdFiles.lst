@@ -1,0 +1,3 @@
+com/testapp/stepdefinitions/LoginSteps.class
+com/testapp/runners/Runner.class
+com/testapp/stepdefinitions/Hooks.class

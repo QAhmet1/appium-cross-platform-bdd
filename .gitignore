@@ -4,9 +4,15 @@ src/test/resources/apps/
 # Allure Reports and Results
 allure-results/
 allure-report/
+allure-results-parallel/
+allure-report-parallel/
 
 # Build and IDE files
 target/
 .idea/
 *.class
 .DS_Store
+
+
+allure-results*/
+allure-report*/

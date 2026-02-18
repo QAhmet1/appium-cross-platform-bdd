@@ -27,7 +27,7 @@ public class LoginPage {
     @iOSXCUITFindBy(accessibility = "btn-login")
     private WebElement loginButton;
 
-    @AndroidFindBy(accessibility = "error-message")
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"error-message\")")
     @iOSXCUITFindBy(accessibility = "error-message")
     private WebElement errorText;
 
@@ -41,4 +41,12 @@ public class LoginPage {
         securityTokenInput.sendKeys(token);
         loginButton.click();
     }
+
+    /**
+     *
+     */
+    public String getErrorMessage() {
+        return errorText.getText();
+    }
+
 }

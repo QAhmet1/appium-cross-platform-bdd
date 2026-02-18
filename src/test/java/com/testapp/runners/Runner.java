@@ -5,22 +5,20 @@ import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
-        plugin = {
-                "pretty",
-                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm", // Allure reporting plugin
-                "json:target/cucumber.json"
-        },
         features = "src/test/resources/features",
         glue = "com/testapp/stepdefinitions",
-        tags = "@smoke"
+        plugin = {
+                "pretty",
+                "html:target/cucumber-reports.html",
+                "json:target/cucumber.json"
+        }
 )
 public class Runner extends AbstractTestNGCucumberTests {
 
     @Override
-    @DataProvider(parallel = true)
+    @DataProvider(parallel = false)
+    // We set this to false because our parallel logic is managed by testng.xml
     public Object[][] scenarios() {
-        /* * This enables TestNG to run Cucumber scenarios in parallel threads.
-         */
         return super.scenarios();
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Android Suite" parallel="false">
+
+    <listeners>
+        <listener class-name="com.testapp.listeners.PlatformTestNgListener"/>
+    </listeners>
+
+    <test name="Android Tests">
+        <parameter name="platform" value="android"/>
+        <classes>
+            <class name="com.testapp.runners.AndroidRunner"/>
+        </classes>
+    </test>
+
+</suite>
+

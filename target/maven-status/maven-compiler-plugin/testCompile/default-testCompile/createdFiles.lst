@@ -1,3 +1,7 @@
+com/testapp/listeners/PlatformTestNgListener.class
+com/testapp/listeners/AllurePlatformCucumberPlugin.class
 com/testapp/stepdefinitions/LoginSteps.class
 com/testapp/runners/Runner.class
+com/testapp/runners/IOSRunner.class
+com/testapp/runners/AndroidRunner.class
 com/testapp/stepdefinitions/Hooks.class

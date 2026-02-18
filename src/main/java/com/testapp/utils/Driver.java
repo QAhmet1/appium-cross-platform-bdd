@@ -12,22 +12,43 @@ import java.util.Objects;
 
 public class Driver {
     private static final ThreadLocal<AppiumDriver> driverPool = new ThreadLocal<>();
+    private static final ThreadLocal<String> platformPool = new ThreadLocal<>();
 
     private Driver() {}
 
-    public static AppiumDriver getDriver() {
+    public static void setPlatform(String platform) {
+        if (platform == null || platform.isBlank()) {
+            return;
+        }
+        platformPool.set(platform.trim().toLowerCase());
+    }
+
+    public static String getPlatform() {
+        return platformPool.get();
+    }
+
+    public static void clearPlatform() {
+        platformPool.remove();
+    }
+
+    public synchronized static AppiumDriver getDriver() {
         if (Objects.isNull(driverPool.get())) {
-            // STEP 2: Priority -> System Property (Parallel), then Config File (Single Run)
-            String platform = System.getProperty("platform");
-            if (platform == null) {
+            // Priority: thread-local platform (TestNG parallel) -> system property -> config file (single run)
+            String platform = platformPool.get();
+            if (platform == null || platform.isBlank()) {
+                platform = System.getProperty("platform");
+            }
+            if (platform == null || platform.isBlank()) {
                 platform = ConfigReader.getProperty("platform");
             }
-            platform = platform.toLowerCase();
+            platform = platform.toLowerCase().trim();
+            System.out.println("[Driver] thread=" + Thread.currentThread().getName() + " selectedPlatform=" + platform);
 
             String appPath = System.getProperty("user.dir") + "/" + ConfigReader.getProperty(platform + ".app.path");
 
             try {
-                URL serverUrl = new URL("http://127.0.0.1:4723");
+                String serverUrlFromConfig = ConfigReader.getProperty("appium.server.url");
+                URL serverUrl = new URL(serverUrlFromConfig);
 
                 switch (platform) {
                     case "android":
@@ -35,7 +56,7 @@ public class Driver {
                                 .setDeviceName(ConfigReader.getProperty("android.device.name"))
                                 .setApp(appPath)
                                 .setAutomationName("UiAutomator2")
-                                .setNewCommandTimeout(Duration.ofSeconds(60));
+                                .setNewCommandTimeout(Duration.ofSeconds(60000));
                         driverPool.set(new AndroidDriver(serverUrl, androidOptions));
                         break;
 
@@ -44,7 +65,7 @@ public class Driver {
                                 .setDeviceName(ConfigReader.getProperty("ios.device.name"))
                                 .setApp(appPath)
                                 .setAutomationName("XCUITest")
-                                .setNewCommandTimeout(Duration.ofSeconds(60));
+                                .setNewCommandTimeout(Duration.ofSeconds(60000));
                         driverPool.set(new IOSDriver(serverUrl, iosOptions));
                         break;
                     default:

@@ -9,18 +9,18 @@ import org.testng.annotations.DataProvider;
         glue = "com/testapp/stepdefinitions",
         plugin = {
                 "pretty",
-                "html:target/cucumber-reports.html",
-                "json:target/cucumber.json",
+                "html:target/cucumber-reports-ios.html",
+                "json:target/cucumber-ios.json",
                 "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm",
                 "com.testapp.listeners.AllurePlatformCucumberPlugin"
         }
 )
-public class Runner extends AbstractTestNGCucumberTests {
+public class IOSRunner extends AbstractTestNGCucumberTests {
 
     @Override
     @DataProvider(parallel = false)
-    // We set this to false because our parallel logic is managed by testng.xml
     public Object[][] scenarios() {
         return super.scenarios();
     }
 }
+

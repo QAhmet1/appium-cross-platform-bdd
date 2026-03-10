@@ -11,25 +11,23 @@ public class Hooks {
 
     @Before
     public void setUp() {
-        /* * Logic to be executed before every scenario. 
-         * Driver initialization is handled by ThreadLocal Driver class.
-         */
+        // Initializes the driver for the current thread (Android or iOS)
         Driver.getDriver();
     }
 
     @After
     public void tearDown(Scenario scenario) {
-        /* * Checks if the scenario failed. If true, takes a screenshot 
-         * and attaches it to the Allure Report.
-         */
+        // Check if scenario failed to take a screenshot for debugging
         if (scenario.isFailed()) {
-            final byte[] screenshot = ((TakesScreenshot) Driver.getDriver()).getScreenshotAs(OutputType.BYTES);
-            scenario.attach(screenshot, "image/png", "Failed_Step_Screenshot");
+            try {
+                final byte[] screenshot = ((TakesScreenshot) Driver.getDriver()).getScreenshotAs(OutputType.BYTES);
+                scenario.attach(screenshot, "image/png", "Failed_Scenario_Screenshot");
+            } catch (Exception e) {
+                System.err.println("Screenshot could not be taken: " + e.getMessage());
+            }
         }
-        
-        /* * Quits the driver and removes it from ThreadLocal pool 
-         * to prevent memory leaks and ensure parallel stability.
-         */
-        Driver.quitDriver();
+
+        // Proper cleanup for the specific thread's driver
+        Driver.closeDriver();
     }
 }
